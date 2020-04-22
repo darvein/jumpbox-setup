@@ -1,0 +1,35 @@
+---
+
+- name: Copying hello.txt to bastion
+  when: "'bastion' is in group_names"
+  copy:
+    src: buffer/
+    dest: /home/vagrant/servers-public-keys
+
+- name: List servers public keys
+  when: "'bastion' is in group_names"
+  command: ls /home/vagrant/servers-public-keys/
+  register: list_files
+
+- name: Signing certs
+  when: "'bastion' is in group_names"
+  command: ssh-keygen -s ~/ca/nextbrave-ca -h -n {{item.split('-')[0]}} -V +52w -I {{item.split('-')[0]}} servers-public-keys/{{item}}
+  with_items:
+    - "{{ list_files.stdout_lines }}"
+
+- name: remove non-signed certs
+  when: "'bastion' is in group_names"
+  command: find servers-public-keys -type f ! -name '*cert*' -delete
+
+- name: Listing files signed
+  when: "'bastion' is in group_names"
+  command: "ls /home/vagrant/servers-public-keys/"
+  register: list_files
+
+- name: Downloading signed certs
+  when: "'bastion' is in group_names"
+  with_items: "{{ list_files.stdout_lines }}"
+  fetch:
+    src: servers-public-keys/{{ item }}
+    dest: signed/{{ item }}
+    flat: yes

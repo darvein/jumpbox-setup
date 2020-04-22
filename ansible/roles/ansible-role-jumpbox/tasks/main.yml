@@ -1,0 +1,24 @@
+---
+
+- name: Fetching servers pub file
+  when: "'servers' is in group_names"
+  import_tasks: get-certs.yml
+
+- name: Create CA
+  when: "'bastion' is in group_names"
+  import_tasks: create-ca.yml
+
+- name: Sign serveres
+  when: "'bastion' is in group_names"
+  import_tasks: sign-servers.yml
+
+- name: Uploading signed keys to servers
+  when: "'servers' is in group_names"
+  become: true
+  copy:
+    src: signed/{{ inventory_hostname }}-id_rsa-cert.pub
+    dest: /etc/ssh/ssh_host_rsa_key-cert.pub
+
+- name: Cleanup
+  when: "'bastion' is in group_names"
+  import_tasks: cleanup.yml

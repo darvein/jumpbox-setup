@@ -1,0 +1,21 @@
+---
+
+- name: Creates CA dir
+  when: "'bastion' is in group_names"
+  file:
+    path: /home/vagrant/ca
+    state: directory
+
+- name: Creates CA servers pub dir
+  when: "'bastion' is in group_names"
+  file:
+    path: /home/vagrant/ca
+    state: directory
+
+- name: Create the CA cert
+  when: "'bastion' is in group_names"
+  openssh_keypair:
+    comment: 'Bastion CA Certificate'
+    path: /home/vagrant/ca/nextbrave-ca
+    type: rsa
+    size: 4096

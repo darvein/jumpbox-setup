@@ -1,0 +1,7 @@
+---
+
+- name: Fetching servers pub file
+  fetch:
+    src: /etc/ssh/ssh_host_rsa_key.pub
+    dest: buffer/{{ inventory_hostname }}-id_rsa.pub
+    flat: yes

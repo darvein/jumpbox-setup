@@ -1,0 +1,16 @@
+  111  ssh-keygen -b 4096 -t rsa -f nextbrave-ca -C "The CA for nextbrave"
+  120  ssh-keygen -s nextbrave-ca -h -n wordpress -V +52w -I wordpress clients/wordpress.pub
+  126  ssh-keygen -s nextbrave-ca -h -n spring -V +52w -I spring clients/spring.pub
+  150  sudo ssh-keygen -s nextbrave-ca -h -n bastion -V +52w -I bastion /etc/ssh/ssh_host_rsa_key.pub
+  200  ssh-keygen -s nextbrave-ca -n bob,svc -V +52w -I bob clients/bob.pub
+
+
+
+# servers
+HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
+TrustedUserCAKeys /home/vagrant/nextbrave-ca.pub
+
+# clients
+vagrant@bob:~$ cat .ssh/known_hosts
+@cert-authority bastion,wordpress,spring ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDOXtwRTTiJU7cjO7viEhnEG5qkJnE3+jVKBDij3VbTJvX+5DTodfGcvSZRKAhClTwt7EIxAHzfG/3WAfYAdkCK0XPHktlCQ526H2GhYmvR+J8mSn+sLArI0rZPHcngYJCiCLpuuGkMwlJCL5unzdhO0WE3jEDrUCCMS1Qs6g02t9U/SaMQr8D4r01cicXNimBJj498Wn2xi7cMOwhHzZ9hhpBR864DWwKgeYyy7gat5I+x3YMasKkrGObUTwYIAptyinRwmSXZDyym1yvWA71EpXsrQuPoGXTubaHehfbOZWkkvoJNrw/PCuaJT4YI16j1T23AV5Z2QpxRngF564uDg42l6wHX3wmLNeq55tFOHpfBaOYPwb0KEoPgZo6pdQkx57+Kp++MhggD4NhWJVQrm1nhde0q9NukHWlsP8DNIIIZCDPVoHusChXyDMQTP0QF1AkDoC5uWMjHkcLduNtan2BmZRTcPyloaR57Osx339u8m9UkpIs5of1H4V55zHIsNAyFQUgYVD9EtcLYlfDfDXlDywHFTW5jCq8GsB4wWnZm9CjkhWyv73GHYpI+V5NUZKuz912CQAH3m5USgJ04uuMu6NcXsXnbHj1HdRIxlaLYBtA1dWRsf1MwRNANEzF0GQaIjM1khMXlQbI0aSRPGZpGq5wWXF39OE78raKBEQ== The CA for nextbrave
+

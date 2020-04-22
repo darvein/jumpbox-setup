@@ -1,0 +1,17 @@
+---
+
+- name: remove bastion signed certs dir
+  when: "'bastion' is in group_names"
+  file:
+    state: absent
+    path: /home/vagrant/servers-public-keys
+
+- name: remove bastion signed certs dir
+  when: "'bastion' is in group_names"
+  file:
+    state: absent
+    path: "{{item}}"
+  delegate_to: "localhost"
+  with_items:
+    - signed
+    - buffer
